@@ -2,6 +2,9 @@ SDIR	=	src
 SRCS	=	philo.c \
 			init.c \
 			destroy.c \
+			routine.c \
+			utils.c \
+			desires.c \
 			parser.c
 
 ODIR	=	obj
@@ -15,7 +18,7 @@ NAME	=	philo
 
 CC		=	cc
 
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	-Wall -Wextra -Werror -g
 
 RM		=	rm -rf
 
