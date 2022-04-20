@@ -6,7 +6,7 @@
 /*   By: oaizab <oaizab@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 21:21:06 by oaizab            #+#    #+#             */
-/*   Updated: 2022/04/12 22:29:57 by oaizab           ###   ########.fr       */
+/*   Updated: 2022/04/20 02:40:07 by oaizab           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@
 # include <sys/types.h>
 # include <string.h>
 
-# define EATING 1
-# define SLEEPING 2
-# define THINKING 3
+# define EAT 1
+# define SLEEP 2
+# define THINK 3
 # define DEAD 4
-# define HUNGRY 5
+# define OVER 5
+# define FORK 6
 
 typedef struct s_args
 {
@@ -36,31 +37,52 @@ typedef struct s_args
 	int	number_of_eats;
 }				t_args;
 
+struct	s_data;
+
 typedef struct s_philo
 {
-	int				philo_number;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				number_of_eats;
-	int				dead;
-	int				state;
-	time_t			last_eat;
-	time_t			start_running; // TODO: time_t instead of uint64_t;
-	pthread_mutex_t	fork;
-	struct s_philo	*right;
+	int				position;
+	int				lfork;
+	int				rfork;
+	int				is_eating;
+	uint32_t		eat_count;
+	uint64_t		limit;
+	uint64_t		last_eat;
+	struct s_data	*state;
+	pthread_mutex_t	mutex;
+	pthread_mutex_t	eat_m;
 }				t_philo;
+
+typedef struct s_data
+{
+	int				philo_count;
+	uint64_t		start_time;
+	uint64_t		time_to_die;
+	uint64_t		time_to_eat;
+	uint64_t		time_to_sleep;
+	int				max_eat;
+	t_philo			*philos;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	print_m;
+	pthread_mutex_t	dead_m;
+}				t_data;
 
 int			is_args_error(t_args args);
 t_args		ft_parser(int ac, char *av[]);
-void		destroy_philos(t_philo **philos);
-t_philo		*init_philos(t_args args);
-void		*routine(void *arg);
-time_t		gettimenow(void);
-void		print_msg(t_philo *philo, const char *msg);
-int			any_die(t_philo *philo);
-int			is_alive(t_philo *philo);
-int			take_forks(t_philo *philo);
-int			eat(t_philo *philo);
+void		clear_data(t_data data);
+int			init_philos(t_data *data);
+int			start_philos(t_data *data);
+uint64_t	gettimenow(void);
+void		print_msg(t_philo *philo, int msg_type);
+const char	*get_message(int message_type);
+void		get_forks(t_philo *philo);
+void		eat(t_philo *philo);
+void		put_forks(t_philo *philo);
+void		*eat_count_c(void *data_v);
+void		*alive_c(void *philo_v);
+int			init(t_data *data, t_args args);
+int			check(int argc, char*argv[], t_args *args);
+int			exit_error(const char *msg);
+void		*routine(void *philo_v);
 
 #endif

@@ -1,36 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oaizab <oaizab@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/23 21:24:23 by oaizab            #+#    #+#             */
-/*   Updated: 2022/04/20 02:42:00 by oaizab           ###   ########.fr       */
+/*   Created: 2022/04/15 21:57:58 by oaizab            #+#    #+#             */
+/*   Updated: 2022/04/20 02:41:12 by oaizab           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	start_philos(t_data *data)
+int	main(int argc, char *argv[])
 {
-	pthread_t	th;
-	int			i;
+	static t_data	data;
+	t_args			args;
 
-	if (data->max_eat >= 0)
-	{
-		if (pthread_create(&th, NULL, eat_count_c, (void *) data) != 0)
-			return (1);
-		pthread_detach(th);
-	}
-	i = 0;
-	while (i < data->philo_count)
-	{
-		if (pthread_create(&th, NULL, routine, (void *) &data->philos[i]))
-			return (1);
-		pthread_detach(th);
-		usleep(1000);
-		i++;
-	}
-	return (0);
+	if (check(argc, argv, &args))
+		return (exit_error("Error Arguments"));
+	if (init(&data, args))
+		return (clear_data(data), exit_error("Error init"));
+	if (start_philos(&data))
+		return (clear_data(data), exit_error("Error starting philos"));
+	pthread_mutex_lock(&data.dead_m);
+	pthread_mutex_unlock(&data.dead_m);
+	clear_data(data);
 }

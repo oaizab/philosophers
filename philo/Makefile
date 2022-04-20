@@ -4,7 +4,12 @@ SRCS	=	philo.c \
 			destroy.c \
 			routine.c \
 			utils.c \
-			desires.c \
+			main.c \
+			message.c \
+			fork.c \
+			eat.c \
+			exit.c \
+			controller.c \
 			parser.c
 
 ODIR	=	obj

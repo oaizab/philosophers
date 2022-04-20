@@ -1,36 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oaizab <oaizab@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/23 21:24:23 by oaizab            #+#    #+#             */
-/*   Updated: 2022/04/20 02:42:00 by oaizab           ###   ########.fr       */
+/*   Created: 2022/04/17 21:58:38 by oaizab            #+#    #+#             */
+/*   Updated: 2022/04/19 02:47:53 by oaizab           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	start_philos(t_data *data)
+void	get_forks(t_philo *philo)
 {
-	pthread_t	th;
-	int			i;
+	pthread_mutex_lock(&philo->state->forks[philo->lfork]);
+	print_msg(philo, FORK);
+	pthread_mutex_lock(&philo->state->forks[philo->rfork]);
+	print_msg(philo, FORK);
+}
 
-	if (data->max_eat >= 0)
-	{
-		if (pthread_create(&th, NULL, eat_count_c, (void *) data) != 0)
-			return (1);
-		pthread_detach(th);
-	}
-	i = 0;
-	while (i < data->philo_count)
-	{
-		if (pthread_create(&th, NULL, routine, (void *) &data->philos[i]))
-			return (1);
-		pthread_detach(th);
-		usleep(1000);
-		i++;
-	}
-	return (0);
+void	put_forks(t_philo *philo)
+{
+	pthread_mutex_unlock(&philo->state->forks[philo->lfork]);
+	pthread_mutex_unlock(&philo->state->forks[philo->rfork]);
+	print_msg(philo, SLEEP);
+	usleep(philo->state->time_to_sleep * 1000);
 }

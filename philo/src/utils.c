@@ -6,56 +6,41 @@
 /*   By: oaizab <oaizab@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:20:12 by oaizab            #+#    #+#             */
-/*   Updated: 2022/04/12 22:09:21 by oaizab           ###   ########.fr       */
+/*   Updated: 2022/04/18 02:27:28 by oaizab           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-time_t	gettimenow(void)
+uint64_t	gettimenow(void)
 {
 	struct timeval	tv;
-	time_t			time;
+	uint64_t		time;
 
 	gettimeofday(&tv, NULL);
 	time = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 	return (time);
 }
 
-void	print_msg(t_philo *philo, const char *msg)
+void	*ft_memset(void *b, int c, size_t len)
 {
-	time_t	time;
+	size_t			i;
 
-	time = gettimenow() - philo->start_running;
-	printf("%.10ld %d %s\n", time, philo->philo_number, msg);
+	i = 0;
+	while (i < len)
+	{
+		((char *) b)[i] = (unsigned char) c;
+		i++;
+	}
+	return (b);
 }
 
-int	is_alive(t_philo *philo)
+void	*ft_calloc(size_t count, size_t size)
 {
-	time_t	time;
+	void	*ptr;
 
-	time = gettimenow();
-	if ((int) (time - philo->last_eat) > philo->time_to_die)
-	{
-		print_msg(philo, "died");
-		philo->state = DEAD;
-		pthread_mutex_unlock(&philo->fork);
-		// pthread_mutex_unlock(&philo->right->fork);
-		return (0);
-	}
-	return (1);
-}
-
-int	any_die(t_philo *philo)
-{
-	t_philo *iter;
-
-	iter = philo->right;
-	while (iter != philo)
-	{
-		if (iter->state == DEAD)
-			return (1);
-		iter = iter->right;
-	}
-	return (iter->state == DEAD);
+	ptr = malloc(count * size);
+	if (ptr)
+		ft_memset(ptr, 0, count * size);
+	return (ptr);
 }
