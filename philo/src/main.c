@@ -6,7 +6,7 @@
 /*   By: oaizab <oaizab@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 21:57:58 by oaizab            #+#    #+#             */
-/*   Updated: 2022/04/20 02:41:12 by oaizab           ###   ########.fr       */
+/*   Updated: 2022/04/21 06:24:36 by oaizab           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,5 @@ int	main(int argc, char *argv[])
 	pthread_mutex_lock(&data.dead_m);
 	pthread_mutex_unlock(&data.dead_m);
 	clear_data(data);
+	return (0);
 }
