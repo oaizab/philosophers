@@ -6,7 +6,7 @@
 /*   By: oaizab <oaizab@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 21:24:23 by oaizab            #+#    #+#             */
-/*   Updated: 2022/04/20 02:42:00 by oaizab           ###   ########.fr       */
+/*   Updated: 2022/04/21 02:58:52 by oaizab           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	start_philos(t_data *data)
 		if (pthread_create(&th, NULL, routine, (void *) &data->philos[i]))
 			return (1);
 		pthread_detach(th);
-		usleep(1000);
+		usleep(100);
 		i++;
 	}
 	return (0);
